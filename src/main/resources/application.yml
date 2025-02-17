@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: para
+  threads:
+    virtual:
+      enabled: true
+  docker:
+    compose:
+      lifecycle-management: start-only
+  sql:
+    init:
+      mode: always
+  datasource:
+    hikari:
+      jdbc-url: jdbc:postgresql://localhost:15432/para
+      username: myuser
+      password: secret
+      driver-class-name: org.postgresql.Driver
+      connection-timeout: 3000
+      validation-timeout: 3000
+      minimum-idle: 5
+      max-lifetime: 240000
+      maximum-pool-size: 20

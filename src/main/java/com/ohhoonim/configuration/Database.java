@@ -15,21 +15,20 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableTransactionManagement
 @Configuration
 public class Database {
-    
+
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
     public HikariConfig hikariConfig() {
         return new HikariConfig();
-    } 
+    }
 
-    @Bean 
+    @Bean
     public DataSource datasource() {
         return new HikariDataSource(hikariConfig());
     }
 
-     @Bean
+    @Bean
     TransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 }
- 

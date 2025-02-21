@@ -199,25 +199,4 @@ public class NoteTest {
     }
 }
 
-/*
-```plantuml
-@startuml
-skinparam monochrome reverse
-start
-:create new note;
-:input title, contents<
-if (none classify) then
-else
-    fork
-        :add project to note|
-    fork again
-        :add shelf to note|
-    fork again
-        :add tag|
-    endfork
-endif
-:save note/
-stop
-@enduml
-```
- */
+

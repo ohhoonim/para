@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
 @WebMvcTest(controllers = { DefaultResponseApi.class })
@@ -15,6 +16,7 @@ public class ResponseIntegrationTest {
     MockMvcTester mockMvcTester;
 
     @Test
+    @WithMockUser
     public void normal() {
         mockMvcTester.get().uri("/defaultResponse/normal")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -26,6 +28,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void exception() {
         mockMvcTester.get().uri("/defaultResponse/exception")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -37,6 +40,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void success() {
         mockMvcTester.get().uri("/defaultResponse/type/success")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -49,6 +53,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void typeFail() {
         mockMvcTester.get().uri("/defaultResponse/type/fail")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -64,6 +69,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void string() {
         mockMvcTester.get().uri("/defaultResponse/string")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -75,6 +81,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void entityString() {
         mockMvcTester.get().uri("/defaultResponse/responseEntity/string")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -86,6 +93,7 @@ public class ResponseIntegrationTest {
     }
 
     @Test
+    @WithMockUser
     public void entityObject() {
         mockMvcTester.get().uri("/defaultResponse/responseEntity/object")
                 .contentType(MediaType.APPLICATION_JSON)

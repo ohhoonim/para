@@ -121,3 +121,5 @@ public class NoteService implements Usecase {
         return notePort.findNote(searchString, page);
     }
 }
+
+

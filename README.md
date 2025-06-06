@@ -188,3 +188,91 @@ Para [paraId] ..left..> "notes [0..*]" Note : > regist note
 
 @enduml
 ```
+
+## Spring Security 프로세스  
+
+```plantuml
+@startuml
+skinparam monochrome reverse
+
+rectangle request as request
+rectangle Filter as filter
+rectangle AuthenticationManager as manager
+rectangle AuthenticationProvider as provider
+rectangle UserDetailsService as service
+rectangle PasswordEncoder as encoder
+rectangle SecurityContext as context
+
+request --> filter : 1. 요청가로챔
+filter --> manager : 2. 인증관련 위임
+manager --> provider : 3. provider 이용
+provider --> service : 4. 사용자 탐색
+provider ..> encoder : 4. 암호 검증
+provider --> manager : 5. 인증결과
+manager --> filter
+filter --> context : 6. Authentication 저장
+
+@enduml
+```
+
+## Spring Security 도에인 language
+
+```plantuml
+@startuml
+skinparam monochrome reverse
+
+interface Authentication {
+    principal
+    credentials
+    authorities
+    getDetails(): Object
+    isAuthenticated(): boolean
+    setAuthenticated(boolean): void
+}
+
+interface UserDetailsService {
+    loadUserByUsername(String): UserDetails
+}
+interface UserDetails {
+    authorities: Collection<? extends GrantedAuthority>
+    password: String
+    username: String
+    isAccountNonExpired: boolean {true}
+    isAccountNonLocked: boolean {true}
+    isCredentialsNonExpired: boolan {true}
+    isEnabled: boolean {true}
+
+}
+
+interface GrantedAuthority {
+    authority: String
+}
+
+interface AuthorizationManager {
+    authorize(Supplier<Authentication>, Object<T>): AuthorizationResult
+    verify(Supplier<Authentication>, Object<T>): void
+}
+
+interface AuthorizationResult {
+    isGranted: boolan
+}
+UserDetailsService ..> UserDetails
+UserDetails ..> GrantedAuthority
+GrantedAuthority ..> AuthorizationManager
+AuthorizationManager ..> AuthorizationResult
+
+@enduml
+```
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.Optional;
@@ -12,8 +13,8 @@ import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 
@@ -28,8 +29,8 @@ import com.ohhoonim.para.api.ParaController.ParaReq;
 import com.ohhoonim.para.api.ParaController.Search;
 import com.ohhoonim.para.service.ParaService;
 
-@Import(ParaService.class)
 @WebMvcTest(ParaController.class)
+@WithMockUser
 public class ParaControllerTest {
 
     @Autowired
@@ -64,7 +65,7 @@ public class ParaControllerTest {
         var paraReq = new ParaNoteReq("project", UUID.randomUUID());
         var body = objectMapper.writeValueAsString(paraReq);
         var paraId = "83a713bf-64fe-4ef5-854b-f30682f7cbd4";
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/" + paraId + "/registNote")
                 .param("category", "project")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,7 +81,7 @@ public class ParaControllerTest {
         var paraReq = new ParaNoteReq("project", UUID.randomUUID());
         var body = objectMapper.writeValueAsString(paraReq);
         var paraId = "83a713bf-64fe-4ef5-854b-f30682f7cbd4";
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/" + paraId + "/removeNote")
                 .param("category", "area")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,6 +94,7 @@ public class ParaControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void moveToPara() throws JsonProcessingException {
         var paraReq = new ParaNoteReq("area", UUID.randomUUID(), "archive");
         var body = objectMapper.writeValueAsString(paraReq);
@@ -102,7 +104,7 @@ public class ParaControllerTest {
                 .thenReturn(Optional.of(
                         Para.of(UUID.fromString(paraId), Area.class)));
 
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/" + paraId + "/moveTo")
                 .param("category", "area")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +136,7 @@ public class ParaControllerTest {
         var newPara = new ParaReq(null, "area", "economic", "micro ecomonimc");
         when(paraService.addPara(any()))
                 .thenReturn(Optional.of(Para.of(UUID.randomUUID(), Area.class)));
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newPara))
@@ -149,7 +151,7 @@ public class ParaControllerTest {
         var para = new ParaReq(paraId, "area", "economic", "micro ecomonimc");
         when(paraService.modifyPara(any()))
                 .thenReturn(Optional.of(Para.of(UUID.randomUUID(), Area.class)));
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/" + paraId + "/modify")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(para))
@@ -163,7 +165,7 @@ public class ParaControllerTest {
     public void removePara() throws JsonProcessingException {
         var paraId = UUID.randomUUID();
         var para = new ParaReq(paraId, null, null, null);
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
                 .uri("/para/" + paraId + "/remove")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(para))
@@ -177,7 +179,7 @@ public class ParaControllerTest {
     public void findProject() throws JsonProcessingException {
         var project = Para.of(UUID.randomUUID(), Project.class);
         var search = new Search<Project> (project, new Page());
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
             .uri("/para/searchProjects")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(search))
@@ -191,7 +193,7 @@ public class ParaControllerTest {
     public void findShelves() throws JsonProcessingException {
         var area = Para.of(UUID.randomUUID(), Area.class);
         var search = new Search<Area> (area, new Page());
-        mockMvcTester.post()
+        mockMvcTester.post().with(csrf())
             .uri("/para/searchShelves")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(search))

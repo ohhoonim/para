@@ -1,4 +1,4 @@
-package com.ohhoonim.configuration;
+package com.ohhoonim.component.db;
 
 import javax.sql.DataSource;
 

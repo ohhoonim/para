@@ -1,0 +1,12 @@
+GET http://127.0.0.1:8080/defaultResponse/exception HTTP/1.1
+content-type: application/json
+
+
+###
+
+POST http://127.0.0.1:8080/note/9bdc1544-b4e9-4e0c-9cae-a982a7336cb1/registTag
+content-type: application/json
+Authorization: Basic john 1234
+
+{"tagId":null,"tag":"java"}
+
